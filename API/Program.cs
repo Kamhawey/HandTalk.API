@@ -2,7 +2,6 @@ using API.Extensions;
 using Carter;
 using HandTalkModel.Module.Extensions;
 using Module.Dictionary.Extensions;
-using Module.Dictionary.Infrastructure.Seeding;
 using Module.Identity.Extensions;
 using Shared.Core.Extensions;
 using Shared.Extensions;
@@ -26,7 +25,7 @@ builder.Services
     .AddMediatRWithAssemblies(dictionaryModuleAssembly);
 
 builder.Services
-    .AddCarterModules(identityModuleAssembly, handTalkModuleAssembly,dictionaryModuleAssembly,sharedModuleAssembly);
+    .AddCarterModules(identityModuleAssembly, handTalkModuleAssembly, dictionaryModuleAssembly, sharedModuleAssembly);
 
 builder.Services
     .AddSharedModuleServices()
@@ -59,5 +58,5 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapCarter();
-
+//await app.SeedDictionaryEntriesAsync();
 app.Run();

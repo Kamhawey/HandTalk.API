@@ -17,10 +17,9 @@ public class FileUploadService : IFileUploadService
     public FileUploadService(IConfiguration configuration)
     {
         _configuration = configuration;
-        _uploadPath = _configuration["FileUpload:UploadPath"] ?? "wwwroot/uploads";
+        _uploadPath = "wwwroot/uploads";
         _baseUrl = _configuration["FileUpload:BaseUrl"] ?? "https://localhost:7000";
-        
-        // Ensure upload directory exists
+
         if (!Directory.Exists(_uploadPath))
         {
             Directory.CreateDirectory(_uploadPath);
@@ -71,7 +70,7 @@ public class FileUploadService : IFileUploadService
         }
     }
 
- 
+
 
     public async Task<Result> DeleteFileAsync(string filePath)
     {
@@ -97,7 +96,7 @@ public class FileUploadService : IFileUploadService
         var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
         var contentType = file.ContentType.ToLowerInvariant();
 
-        return _allowedImageExtensions.Contains(extension) && 
+        return _allowedImageExtensions.Contains(extension) &&
                _allowedImageMimeTypes.Contains(contentType);
     }
 
@@ -112,7 +111,7 @@ public class FileUploadService : IFileUploadService
         var fileName = Path.GetFileNameWithoutExtension(originalFileName);
         var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         var guid = Guid.NewGuid().ToString("N")[..8];
-        
+
         return $"{fileName}_{timestamp}_{guid}{extension}";
     }
 }
