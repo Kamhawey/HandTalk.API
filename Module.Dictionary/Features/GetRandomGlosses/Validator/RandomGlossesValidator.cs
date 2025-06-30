@@ -1,7 +1,7 @@
 using FluentValidation;
-using Module.Dictionary.Features.GetPopularGlosses.Handler;
+using Module.Dictionary.Features.GetRandomGlosses.Handler;
 
-namespace Module.Dictionary.Features.GetPopularGlosses.Validator;
+namespace Module.Dictionary.Features.GetRandomGlosses.Validator;
 
 public class RandomGlossesValidator : AbstractValidator<RandomGlossesQuery>
 {
