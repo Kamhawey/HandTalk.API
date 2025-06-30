@@ -14,7 +14,7 @@ public class GetPopularGlosses : ICarterModule
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapGet(DictionaryEndpointConstants.Routes.GetPopularGlosses, 
-                async (int count, ISender sender) => await sender.Send(new PopularGlossesQuery(count)))
+                async (int count, ISender sender) => await sender.Send(new RandomGlossesQuery(count)))
             .WithName(nameof(GetPopularGlosses))
             .WithTags(DictionaryEndpointConstants.Tags.Dictionary)
             .Produces<List<DictionaryEntryDto>>(StatusCodes.Status200OK)

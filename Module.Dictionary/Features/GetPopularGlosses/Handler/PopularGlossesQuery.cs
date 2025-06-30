@@ -5,9 +5,9 @@ using Shared.DTOs.Dictionary;
 
 namespace Module.Dictionary.Features.GetPopularGlosses.Handler;
 
-public record PopularGlossesQuery(int Count = 10) : IQuery<List<DictionaryEntryDto>>;
+public record RandomGlossesQuery(int Count = 10) : IQuery<List<DictionaryEntryDto>>;
     
-public class PopularGlossesQueryHandler : IQueryHandler<PopularGlossesQuery, List<DictionaryEntryDto>>
+public class PopularGlossesQueryHandler : IQueryHandler<RandomGlossesQuery, List<DictionaryEntryDto>>
 {
     private readonly DictionaryModuleDbContext _dbContext;
         
@@ -16,7 +16,7 @@ public class PopularGlossesQueryHandler : IQueryHandler<PopularGlossesQuery, Lis
         _dbContext = dbContext;
     }
         
-    public async Task<List<DictionaryEntryDto>> Handle(PopularGlossesQuery request, CancellationToken cancellationToken)
+    public async Task<List<DictionaryEntryDto>> Handle(RandomGlossesQuery request, CancellationToken cancellationToken)
     {
         var count = Math.Min(Math.Max(1, request.Count), 100);
             
