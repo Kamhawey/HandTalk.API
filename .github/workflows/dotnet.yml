@@ -1,0 +1,52 @@
+name: Build and Publish HandTalk
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch: 
+  
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      Solution: 'HandTalk.sln'
+      Project: './API/API.csproj'
+      BuildConfiguration: 'Release'
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x' 
+    - name: Install NuGet
+      uses: NuGet/setup-nuget@v1
+    
+    - name: NuGet Restore
+      run: nuget restore ${{ env.Solution }}
+    
+    - name: Build
+      run: dotnet build ${{ env.Project }} --configuration ${{ env.BuildConfiguration }} --no-restore
+    
+    - name: Publish
+      run: dotnet publish ${{ env.Project }} --configuration ${{ env.BuildConfiguration }} --no-build --output ./publish
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: HandTalkArtifact
+        path: ./publish
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    steps:
+      - name: Download artifact from build
+        uses: actions/download-artifact@v4 
+        with:
+          name: HandTalkArtifact
+          path: ./publish
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: HandTalk-API
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./publish
