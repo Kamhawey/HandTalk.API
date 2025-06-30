@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package handtalk;
+
+service HandTalk {
+    rpc GlossToPose (GlossRequest) returns (PoseResponse) {}
+
+    rpc HealthCheck (HealthRequest) returns (HealthResponse) {}
+
+    rpc GetVersion (VersionRequest) returns (VersionResponse) {}
+}
+
+message GlossRequest {
+    string gloss = 1;
+    enum OutputFormat {
+        RAW_POSE = 0;
+        RENDERED_IMAGE = 1;
+    }
+    OutputFormat format = 2;
+}
+
+message PoseResponse {
+    bool success = 1;
+    string error_message = 2;
+
+    repeated string words = 3;
+
+    bytes raw_pose_data = 4;
+    bytes rendered_image = 5;
+
+    double processing_time = 6;
+    string server_time = 7;
+}
+
+message HealthRequest {}
+
+message HealthResponse {
+    string status = 1;
+    string timestamp = 2;
+    double uptime = 3;
+}
+
+message VersionRequest {}
+
+message VersionResponse {
+    string version = 1;
+    string name = 2;
+    repeated string endpoints = 3;
+}

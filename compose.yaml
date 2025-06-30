@@ -1,0 +1,42 @@
+﻿version: '3.8'
+
+services:
+  api:
+    image: api
+    build:
+      context: .
+      dockerfile: API/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Database=Server=db;Initial Catalog=HandTalkDev;User Id=sa;Password=MohamedKamhawey@2025;TrustServerCertificate=True
+      - JwtSettings__Key=76a231b817cf3d2078feab2c46aa832f65335dce3534c09201ab1ad45e1d5dbcc5b7343e80c28c21c1ac04ae9c6c99583fcfe78dbecfa410ec7715977ad5de83e3ad252c8ee54dc6e4eddecd498ba515432b7b42b9b28ef72c4c2ab81a55be08b968380eac9b1beb2f7a04f8a85a88a45fc899f9b5cda6f2f610aa95c1de9445
+      - JwtSettings__ValidateIssuer=false
+      - JwtSettings__ValidateAudience=false
+      - JwtSettings__TokenExpMinutes=60
+      - JwtSettings__RefreshTokenExpMinutes=1000
+      - Mail__Host=smtp.gmail.com
+      - Mail__Port=465
+      - Mail__UserName=handtalk.team@gmail.com
+      - Mail__Password=zcennydvutfthztq
+      - Mail__DisplayName=HandTalk Team
+    depends_on:
+      - db
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/$APP_UID/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/$APP_UID/.aspnet/https:ro
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=MohamedKamhawey@2025
+    volumes:
+      - sqldata:/var/opt/mssql
+
+volumes:
+  sqldata:
